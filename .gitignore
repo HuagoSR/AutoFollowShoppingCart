@@ -1,0 +1,5 @@
+.codex/
+.agents/
+.tmp-gh-config/
+Thumbs.db
+*.log
