@@ -66,10 +66,14 @@ Android 手机 / OpenBot App
 AutoFollowShoppingCart/
 ├─ design/
 │  ├─ structure.md
+│  ├─ background/
+│  ├─ gantt/
 │  └─ doc/
 │     ├─ 2-9自主跟随机器人平台-深研院-张凯.pptx
 │     ├─ 智能系统创新实践学生手册.pdf
 │     └─ 项目汇报超市自主跟随购物车.md
+├─ dev/
+│  └─ OpenBot/        # OpenBot upstream project, tracked as a Git submodule
 ├─ README.md
 └─ AGENTS.md
 ```
@@ -95,6 +99,14 @@ AutoFollowShoppingCart/
 - 轻量级视觉模型：人物检测与短时目标跟踪
 
 本项目的重点不是重写 OpenBot，而是基于 OpenBot 做“购物车场景化集成”和安全策略增强。
+
+当前 OpenBot 上游工程以 Git submodule 形式放在 `dev/OpenBot`。首次克隆本仓库后，可执行：
+
+```bash
+git submodule update --init --recursive
+```
+
+硬件到位前的软件验证优先从 OpenBot Android 工程开始：使用 Android Studio 打开 `dev/OpenBot/android`，先完成 Gradle Sync、`robot` App 构建安装和手机端摄像头 / 权限验证，再进入跟随逻辑和手机-下位机通信联调。
 
 ## 4 周阶段目标
 
