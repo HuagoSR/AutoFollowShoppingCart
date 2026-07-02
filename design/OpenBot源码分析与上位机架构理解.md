@@ -330,16 +330,18 @@ void send_wheel_reading(long duration) {
 ### 6.2 上位机开发重点工作
 
 1. **人物检测与目标锁定**：在现有 Detector 基础上实现目标用户识别
-2. **跟随控制策略**：基于检测框位置输出 `Control(left, right)`
+2. **确认式目标初始化**：新增“候选目标采集 -> 用户确认 -> 重识别启动 -> 倒计时进入 FOLLOW”的两阶段初始化流程
+3. **跟随控制策略**：基于检测框位置输出 `Control(left, right)`
    - 目标在画面中心 → `Control(forward, forward)`
    - 目标偏左 → `Control(forward, forward - turn_delta)`
    - 目标偏右 → `Control(forward - turn_delta, forward)`
-3. **状态机实现**：FOLLOW / LOST / SEARCH / STOP 状态切换
-4. **目标丢失处理**：
+4. **目标记忆与状态机实现**：至少覆盖 `IDLE / CAPTURE_TARGET / LOCKED_PENDING_CONFIRM / CONFIRMED_ARMED / REACQUIRE_TARGET / READY_TO_FOLLOW / FOLLOW / LOST / SEARCH / STOP`
+5. **目标丢失处理**：
    - 连续 N 帧未检测到 → 输出 `Control(0, 0)` 取消前进
    - 启动搜索计时 → 输出 `Control(0, ±search_speed)` 原地扫描
    - 超时 → 输出 `Control(0, 0)` 停车
-5. **模式切换 UI**：手动/跟随/停止切换
+6. **无底盘调试模式**：在硬件未联调完成前先输出检测、目标状态、匹配分数、控制量和日志，不真实发动车辆
+7. **模式切换 UI**：手动 / 跟随 / 停止切换，以及候选目标确认 / 重拍 / 取消交互
 
 ### 6.3 与下位机的接口
 
@@ -369,4 +371,5 @@ void send_wheel_reading(long duration) {
 | `dev/OpenBot/android/controller/.../DualDriveSeekBar.kt` | 控制器 App UI |
 | `design/OpenBot与四驱麦轮AT8236下位机适配风险说明.md` | 下位机适配风险分析 |
 | `design/structure.md` | 系统设计主文档 |
+| `design/自主跟随购物车上位机软件开发计划.md` | 上位机目标初始化、目标记忆与无底盘调试计划 |
 | `design/工程决策与实现策略记录.md` | 工程决策记录 |
